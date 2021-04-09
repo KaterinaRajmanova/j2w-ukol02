@@ -34,9 +34,11 @@ public class MainController {
 
         ModelAndView result = new ModelAndView("index");
         result.addObject("citatText", citatText);
-        result.addObject("citatObrazek",String.format("/images/image%d.jpg", nahodneCislo));
+        result.addObject("citatObrazek",String.format("background-image: url(/images/image%d.jpg)", nahodneCislo));
 
         return result;
+
+
     }
 
 
