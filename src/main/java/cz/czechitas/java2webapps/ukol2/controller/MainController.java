@@ -4,30 +4,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Controller
 public class MainController {
 
     @GetMapping("/")
-    public ModelAndView citatDne() throws FileNotFoundException {
+    public ModelAndView citatDne() throws IOException {
 
         String citatText;
         List<String> citatyDneSeznam = new ArrayList<>();
+        citatyDneSeznam = readAllLines("citaty.txt");
         List<String> obrazkyDneSeznam = new ArrayList<>();
-
-        citatyDneSeznam = Arrays.asList("Největší chyba, kterou v životě můžete udělat, je mít pořád strach, že nějakou uděláte" +
-                "", "Úspěch není konečný, neúspěch není fatální: odvaha pokračovat je to, co se počítá" +
-                "", "Cesta k úspěchu a cesta k neúspěchu jsou téměř přesně stejné" +
-                "", "Nebojte se vzdát dobrého kvůli skvělému" +
-                "", "Nepokoušejte se stát úspěšnou osobou, ale raději se pokuste stát se hodnotnou osobou." +
-                "", "Přestaňte se honit za penězi a začněte se honit za vášní." +
-                "", "Úspěch je chůze od neúspěchu k neúspěchu bez ztráty nadšení." +
-                "", "Pokud nejste ochotni mimořádně riskovat, musíte se spokojit s obyčejností." +
-                "", "Veškerý pokrok se děje mimo zónu komfortu." +
-                "", "Soustřeďte se na to, kam chcete jít, nikoli na to, čeho se bojíte.");
 
         obrazkyDneSeznam = Arrays.asList("CgyrwbE6Hm4","sKJ7zSylUao","MVr6pgZzlbY","YnNczu62rdk","JdjdIjzJl94","Jdem_eQTHTQ" +
                 "","k88qpEjVJ1k","JdPHvI7VF0o","tuIedADlL_Q","d1RHYJ09Ur0");
@@ -44,9 +36,17 @@ public class MainController {
         result.addObject("citatObrazek","background-image: url(https://source.unsplash.com/" +
                 ""+nahodnyObrazek+"/1600x900)");
         return result;
-
-
     }
 
+    private static List<String> readAllLines(String resource)throws IOException{
+        ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
+        try(InputStream inputStream=classLoader.getResourceAsStream(resource);
+            BufferedReader reader=new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))){
+            Stream<String> streamRadku = reader.lines();
+            List <String> listString = streamRadku.collect(Collectors.toList());
+
+            return listString;
+        }
+    }
 
 }
